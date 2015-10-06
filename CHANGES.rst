@@ -1,6 +1,17 @@
 Changelog
 =========
 
+2.0a4 (unreleased)
+------------------
+
+- nothing
+
+2.0a3 (2015-09-29)
+------------------
+
+- Hidewhen and subforms
+  [ebrehault]
+
 2.0a2 (2015-09-08)
 ------------------
 
