@@ -44,6 +44,7 @@ FIELD_TYPES = {
     "GOOGLECHART": ["Google chart", "FieldIndex"],
     "GOOGLEVISUALIZATION": ["Google visualization", "FieldIndex"],
     "BOOLEAN": ["Boolean", "FieldIndex"],
+    "DATAGRID": ["Datagrid", "KeywordIndex"],
 }
 
 FIELD_MODES = [

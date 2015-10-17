@@ -240,7 +240,7 @@ class PlominoField(Item):
 
         except Exception, e:
             self.traceRenderingErr(e, self)
-            return ""
+            return e
 
     def getSettings(self):
         """
