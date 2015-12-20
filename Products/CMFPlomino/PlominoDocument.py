@@ -417,6 +417,8 @@ class PlominoDocument(CatalogAware, CMFBTreeFolder, Contained):
         # process editable fields (we read the submitted value in the request)
         form.readInputs(self, REQUEST, process_attachments=True)
 
+        notify(PlominoBeforeDocumentSaveEvent(self))
+
         # refresh computed values, run onSave, reindex
         self.save(form, creation)
 

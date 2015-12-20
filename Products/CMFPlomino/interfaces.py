@@ -64,6 +64,10 @@ class IXMLImportExportSubscriber(Interface):
 class IPlominoSafeDomains(Interface):
     """Marker interface for PlominoSafeDomains
     """
+    
+class IPlominoBeforeDocumentSaveEvent(IObjectEvent):
+    """Before object save
+    """
 
 class IPlominoAfterDocumentSaveEvent(IObjectEvent):
     """An object has been modified
