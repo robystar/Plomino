@@ -22,6 +22,33 @@
     <tal:block_hasgooglevisualizationfield tal:condition="python:here.hasGoogleVisualizationField()">
         <tal:script metal:use-macro="here/googlevisualization_macro/macros/js_library">//load google js</tal:script>
     </tal:block_hasgooglevisualizationfield>
+    <script 
+        tal:condition="here/hasDynamicContent"
+        tal:define="form python:here;
+                    form_method python:form.getFormMethod();
+                    "
+        type="text/javascript"
+        tal:content="string:
+function refreshDynamicContent() {
+    var onsuccess = function(data, textStatus, xhr) {
+        for (var hw in data.hidewhen)
+            jQuery('.hidewhen-' + hw).css('display', data.hidewhen[hw]?'none':'block');
+        for (var df in data.dynamicfields)
+            jQuery('.dynamic-' + df).text(data.dynamicfields[df]);
+    }
+    jQuery.ajax({
+        type: '${form_method}',
+        url: 'computedynamiccontent',
+        data: jQuery('#plomino_form').serialize(),
+        success: onsuccess,
+        dataType: 'json' 
+    });
+}
+jQuery(document).ready( function() {
+    jQuery('#plomino_form :input').change(refreshDynamicContent);
+});
+">
+    </script>
     <tal:block_hasjsresources 
         tal:define="jsresources python:here.get_resources_js()"
         tal:condition="jsresources"
