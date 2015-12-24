@@ -67,17 +67,18 @@ class DatetimeField(BaseField):
         fieldname = self.context.id
         if isinstance(submittedValue, basestring):
             submittedValue = submittedValue.strip()
+            fmt = self.format or self.context.getParentDatabase().getDateTimeFormat() or  '%Y-%m-%d'
             try:
                 # check if date only:
                 if len(submittedValue) == 10:
-                    v = StringToDate(submittedValue, '%Y-%m-%d')
+                    v = StringToDate(submittedValue, fmt)
                 else:
                     # calendar widget default format is '%Y-%m-%d %H:%M' and
                     # might use the AM/PM format
                     if submittedValue[-2:] in ['AM', 'PM']:
-                        v = StringToDate(submittedValue, '%Y-%m-%d %I:%M %p')
+                        v = StringToDate(submittedValue, fmt + ' %I:%M %p')
                     else:
-                        v = StringToDate(submittedValue, '%Y-%m-%d %H:%M')
+                        v = StringToDate(submittedValue, fmt + ' %H:%M')
             except:
                 errors.append(
                         "%s must be a date/time (submitted value was: %s)" % (
@@ -136,24 +137,22 @@ class DatetimeField(BaseField):
         """
         if isinstance(submittedValue, basestring):
             submittedValue = submittedValue.strip()
+            fmt = self.format or self.context.getParentDatabase().getDateTimeFormat() or '%Y-%m-%d'
             try:
                 # check if date only:
                 if len(submittedValue) == 10:
-                    d = StringToDate(submittedValue, '%Y-%m-%d')
+                    d = StringToDate(submittedValue, fmt)
                 else:
                     # calendar widget default format is '%Y-%m-%d %H:%M' and
                     # might use the AM/PM format
                     if submittedValue[-2:] in ['AM', 'PM']:
-                        d = StringToDate(submittedValue, '%Y-%m-%d %I:%M %p')
+                        d = StringToDate(submittedValue, fmt + ' %I:%M %p')
                     else:
-                        d = StringToDate(submittedValue, '%Y-%m-%d %H:%M')
+                        d = StringToDate(submittedValue, fmt + ' %H:%M')
                 return d
             except:
                 # with datagrid, we might get dates formatted differently than
                 # using calendar widget default format
-                fmt = self.format
-                if not fmt:
-                    fmt = self.context.getParentDatabase().getDateTimeFormat()
                 return StringToDate(submittedValue, fmt)
         # it is instance type when no js is detected
         # submittedValue = ampm: , day: 09, hour: 00, minute: 00, month: 03, year: 1993
@@ -184,9 +183,7 @@ class DatetimeField(BaseField):
 
         try:
             if fieldValue and isinstance(fieldValue, basestring):
-                fmt = self.format
-                if not fmt:
-                    fmt = form.getParentDatabase().getDateTimeFormat()
+                fmt = self.format or form.getParentDatabase().getDateTimeFormat()
                 fieldValue = StringToDate(fieldValue, fmt)
             elif "year" in fieldValue and "month" in fieldValue and \
                  "day" in fieldValue and "ampm" in fieldValue and \
