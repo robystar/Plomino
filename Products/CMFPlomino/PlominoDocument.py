@@ -85,7 +85,7 @@ except ImportError:
 from plone.indexer.interfaces import IIndexableObjectWrapper, IIndexableObject
 
 from zope.event import notify
-from events import PlominoAfterDocumentSaveEvent
+from events import PlominoBeforeDocumentSaveEvent, PlominoAfterDocumentSaveEvent
 
 
 class PlominoDocument(CatalogAware, CMFBTreeFolder, Contained):
