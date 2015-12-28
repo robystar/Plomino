@@ -1,12 +1,13 @@
 (function ($) {
-
+    "use strict";
+    
     function initDatePicker() {
         var value = $(this).val();
         var options = $(this).data('datepickerOptions');
         if(typeof(options)!='object') options = {};
         if ( $(this).data('datepickerDateformat') ) {
             options['dateFormat'] = $(this).data('datepickerDateformat');
-        };        
+        };
         if ( $(this).data('datepickerMindate') ) {
             options['minDate'] = $(this).data('datepickerMindate');
         };
@@ -20,12 +21,12 @@
     $(document).on('ready',function(){
         $(".date").datepicker().each(initDatePicker);
     });
-
+    
     $(document).on('opendialog',function(e, container){
         $(container).find('.date').each(function(){
             $(this).attr("id", this.id +  "_dialog")
         })
-        $(container).find('.date').datepicker().each(initDatePicker)
+        $(container).find('.date').datepicker().each(initDatePicker);
     });
-
+    
 })(jQuery);
