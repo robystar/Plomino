@@ -100,5 +100,5 @@
              id="++resource++plomino.javascript/plomino.design.js"
              inline="False"
              insert-after="++resource++codemirror/convertTextAreas.js"
-             />             
+             />
 </object>
