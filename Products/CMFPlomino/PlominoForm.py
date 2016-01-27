@@ -1069,10 +1069,13 @@ class PlominoForm(ATFolder):
         (works only with isDynamicHidewhen)
         """
 
+        db=self.getParentDatabase()
         if parent_form is None:
-            parent_form = self
+            if "Form" in REQUEST.keys():
+                parent_form = db.getForm(REQUEST["Form"])
+            else:
+                parent_form = self
 
-        db = parent_form.getParentDatabase()
         result = {}
         target = getTemporaryDocument(
                 db,
@@ -1082,7 +1085,7 @@ class PlominoForm(ATFolder):
                 validation_mode=validation_mode)
 
         hidewhens =  parent_form.getHidewhenFormulas()
-        for subformname in self.getSubforms(doc=target):
+        for subformname in parent_form.getSubforms(doc=target):
             form = db.getForm(subformname)
             if not form:
                 msg = 'Missing subform: %s. Referenced on: %s' % (subformname, parent_form.id)
