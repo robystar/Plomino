@@ -1116,13 +1116,16 @@ class PlominoDesignManager(Persistent):
             for name, sub_obj in obj.objectItems():
                 sub_node = self.exportResourceAsXML(xmldoc, sub_obj)
                 node.appendChild(sub_node)
-        else:
+        elif hasattr(obj, "data"):
             node.setAttribute('contenttype', obj.getContentType())
             stream = obj.data
             if not hasattr(stream, "encode"):
                 stream = stream.data
             data = xmldoc.createCDATASection(stream.encode('base64'))
             node.appendChild(data)
+        else:
+            logger.info("Export of %s resource not implemented:%s not exported" %(resource_type,id))
+
         return node
 
     security.declareProtected(DESIGN_PERMISSION, 'exportDesignAsJSON')
