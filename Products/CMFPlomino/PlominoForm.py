@@ -906,7 +906,7 @@ class PlominoForm(ATFolder):
     security.declarePrivate('_get_html_content')
     def _get_html_content(self):
         plone_tools = getToolByName(self, 'plone_utils')
-        encoding = plone_tools.getSiteEncoding()
+        encoding = "utf-8"  #plone_tools.getSiteEncoding()
         layout = self.getField('FormLayout')
         html_content = layout.getRaw(self).decode(encoding)
         return html_content.replace('\n', '')
@@ -1793,7 +1793,7 @@ class PlominoForm(ATFolder):
                     'iTotalDisplayRecords': len(result),
                     'aaData': result}
 
-        logger.info('PlominoForm.tojson> item: %s, result: %s' % (`item`, `result`[:20])) #DBG
+        ##logger.info('PlominoForm.tojson> item: %s, result: %s' % (`item`, `result`[:20])) #DBG
         return json.dumps(result)
 
     def _getDatabaseViews(self):
