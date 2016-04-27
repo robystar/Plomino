@@ -1,4 +1,5 @@
 <span tal:define="widget python:options['field'].getSettings('widget');
+	            frm_dialog python:context.REQUEST.get('Plomino_Parent_Form') or '';
 				selection options/selection" 
 				tal:attributes="class python:options['fieldname'] + '-' + 'selectionfield'">
 	<tal:widget tal:condition="python:test(widget=='SELECT')">
@@ -29,8 +30,8 @@
 					tal:attributes="name options/fieldname;
 							value python:l[1];
 							checked python:test(currentaslist and l[1] in currentaslist,1,0);
-							id python:options['fieldname'] + '-' + l[1]">
-					<label tal:attributes="for python:options['fieldname'] + '-' + l[1]" tal:content="structure python:l[0]">value</label>
+							id python:frm_dialog + options['fieldname'] + '-' + l[1]">
+					<label tal:attributes="for python:frm_dialog + options['fieldname'] + '-' + l[1]" tal:content="structure python:l[0]">value</label>
 				</span>
 				<tal:sep tal:condition="not:repeat/v/end" tal:content="structure python:options['field'].getSettings('separator')">separator</tal:sep>
 			</tal:block>
@@ -46,8 +47,8 @@
 						tal:attributes="name options/fieldname;
 							value python:l[1];
 							checked python:test(currentaslist and l[1] in currentaslist,1,0);
-							id python:options['fieldname'] + '-' + l[1]">
-					<label tal:attributes="for python:options['fieldname'] + '-' + l[1]" tal:content="structure python:l[0]">value</label>
+							id python:frm_dialog + options['fieldname'] + '-' + l[1]">
+					<label tal:attributes="for python:frm_dialog + options['fieldname'] + '-' + l[1]" tal:content="structure python:l[0]">value</label>
 				</span>
 				<tal:sep tal:condition="not:repeat/v/end" tal:content="structure python:options['field'].getSettings('separator')">separator</tal:sep>
 			</tal:block>
@@ -151,8 +152,8 @@
 		<div class="picklist">
 			<img src="dialog-close.png" alt="Close the dialog" title="Close the dialog" class="close_button" style="float: right; display: none" />
 				
-			<label tal:attributes="for string:${fieldid}_search">Search</label>
-			<input type="text" tal:attributes="id string:${fieldid}_search" />
+			<label tal:attributes="for string:${frm_dialog}${fieldid}_search">Search</label>
+			<input type="text" tal:attributes="id string:${frm_dialog}${fieldid}_search" />
 
 	        <table id='dynamictable_table' tal:attributes="id string:${fieldid}_table" class="display"></table>
 	        <div style="clear: both"></div>
