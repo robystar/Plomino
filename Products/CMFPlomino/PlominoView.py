@@ -756,7 +756,6 @@ class PlominoView(ATFolder):
                 # if it's a duck!
                 # XXX Use a more robust method to tell apart
                 # date indexes from non-dates
-
                 if isinstance(index, DateIndex):
                     # convert value(s) to date(s)
                     if isinstance(value, basestring):

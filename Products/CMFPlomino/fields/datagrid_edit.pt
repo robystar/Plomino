@@ -29,7 +29,7 @@
                 var ${fieldname}_datatable;
                 jQuery(document).ready(function() {
                     ${fieldname}_datatable = jQuery('#${fieldname}_datagrid').dataTable( {
-                        'sAjaxSource': 'tojson?item=${fieldname}&rendered=true&datatables=true',
+                        'sAjaxSource': 'tojson?formid=${form_name}&item=${fieldname}&rendered=true&datatables=true',
                         'sServerMethod': '${form_method}',
                         'fnServerParams': function ( aoData ) {
                             ${request_items}
