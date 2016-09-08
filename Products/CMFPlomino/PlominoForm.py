@@ -494,6 +494,7 @@ class PlominoForm(ATFolder):
                     f.id in layout]
         result.sort(key=lambda elt: elt.id.lower())
         if includesubforms:
+
             subformsseen = []
             for subformname in self.getSubforms(
                     doc, applyhidewhen, validation_mode=validation_mode):
@@ -655,9 +656,15 @@ class PlominoForm(ATFolder):
                         to_find.remove(field)
                     elif field_node and togroup:
                         # found a field in our group thats not ours
-                        # disolve grouping
-                        togroup = found = []
-                        break
+                        # If it's a dynamic field we want this in our groping
+                        group_field_id = field_node.text().strip()
+                        group_field = self.getFormField(group_field_id)
+                        if group_field is not None and group_field.getIsDynamicField():
+                            found_in_sibling = True
+                        # otherwise disolve grouping
+                        else:
+                            togroup = found = []
+                            break
 
                     for label in set(to_find):
                         if sibling in pq(label).parents() or label == sibling:
@@ -735,7 +742,7 @@ class PlominoForm(ATFolder):
     security.declareProtected(READ_PERMISSION, 'displayDocument')
     @plomino_profiler('form')
     def displayDocument(self, doc, editmode=False, creation=False,
-            parent_form_id=False, request=None):
+            parent_form_id=False, request=None, fieldname_transform=None):
         """ Display the document using the form's layout
         """
         # Create a temp doc to work with
@@ -808,7 +815,8 @@ class PlominoForm(ATFolder):
                             temp_doc,
                             editmode,
                             creation,
-                            request=request)
+                            request=request,
+                            fieldname_transform=fieldname_transform)
                         )
 
         # insert subforms
@@ -817,7 +825,8 @@ class PlominoForm(ATFolder):
             if subform:
                 subformrendering = subform.displayDocument(
                         doc, editmode, creation, parent_form_id=self.id,
-                        request=request)
+                        request=request,
+                        fieldname_transform=fieldname_transform)
                 html_content = html_content.replace(
                         '<span class="plominoSubformClass">%s</span>' %
                         subformname,
@@ -1611,6 +1620,8 @@ class PlominoForm(ATFolder):
         for f in fields:
             fieldname = f.id
             fieldtype = f.getFieldType()
+
+
             submittedValue = REQUEST.get(fieldname)
 
             field_errors = []
@@ -1657,7 +1668,10 @@ class PlominoForm(ATFolder):
                 field_errors = field_errors + f.validateFormat(submittedValue)
 
             for field_error in field_errors:
-                errors.append({'field': fieldname, 'error': field_error})
+                if isinstance(field_error, basestring):
+                    errors.append({'field': fieldname, 'error': field_error})
+                else:
+                    errors.append(field_error)
 
         return errors
 

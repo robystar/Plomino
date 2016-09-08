@@ -3,22 +3,24 @@
             fieldname python:options['fieldname'];
             request field/REQUEST;
             v options/fieldvalue;
+            need_ajax python:field.id not in request and 'rendered' in v and len(v['rendered']) > 10;
+            sAjaxSource string:'sAjaxSource': 'tojson?item=${fieldname}&rendered=true&datatables=true','sServerMethod': 'GET',;
+            sAjaxSource python:sAjaxSource if need_ajax else '';
+            bServerSide python:'true' if not need_ajax else 'false';
+            rendered_data python:field.getSettings().tojson(v, rendered=True) if not need_ajax else '[]';
             form field/getParentNode;
             form_method form/getFormMethod;
             widget python:field.getSettings('widget');">
 
-    <tal:read_dynamic condition="python:widget!='READ_STATIC'">
+    <tal:read_dynamic condition="python:widget=='REGULAR'">
         <script type="text/javascript" charset="utf-8"
             tal:define="param python:field.getSettings().getParameters();
                         request_items python:field.getSettings().request_items_aoData(request);"
             tal:content="structure string:
                         jQuery(document).ready(function() {
                             jQuery('#${fieldname}_datagrid').dataTable( {
-                                'sAjaxSource': 'tojson?item=${fieldname}&rendered=true&datatables=true',
-                                'sServerMethod': '${form_method}',
-                                'fnServerParams': function ( aoData ) {
-                                    ${request_items}
-                                },
+                                ${sAjaxSource}
+                                'aaData': ${rendered_data},
                                 'bJQueryUI': true,
                                 ${param},
                                 'oLanguage': {
@@ -46,4 +48,23 @@
             </tr>
         </table>
     </tal:read_static>
+
+
+    <tal:read_repeating condition="python:widget=='REPEATING'"
+               define="subforms python:list(field.getSettings().toSubforms(v, options['doc'], editmode=False));
+               row_count python:len(field.getSettings().rows(v))">
+        <tal:block tal:repeat="subform subforms">
+
+            <div tal:define="index repeat/subform/index;
+                show python:index < row_count"
+                 tal:condition="show"
+                 tal:attributes="id string:repeat-${fieldname}-${index};">
+                    <h2 tal:content="string:${fieldname} ${repeat/subform/number}"></h2>
+                    <tal:block tal:replace="structure subform"/>
+
+            </div>
+        </tal:block>
+
+    </tal:read_repeating>
+
 </tal:block>
