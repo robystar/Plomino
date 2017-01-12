@@ -85,6 +85,7 @@ jQuery(document).ready( function() {
             name form/id;
             action python:here.doc_url()+'/saveDocument';
             method form_method;
+            class string:plomino_form;
             enctype enctype|nothing
             "
       id="plomino_form">

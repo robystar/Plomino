@@ -94,6 +94,7 @@ jQuery(document).ready( function() {
                         name form/id;
                         action string:${form/absolute_url}/createDocument;
                         method form_method;
+                        class string:plomino_form;
                         enctype enctype|nothing
                         "
                 id="plomino_form">
@@ -164,6 +165,7 @@ jQuery(document).ready( function() {
                         name form/id;
                         action string:${form/absolute_url}/searchDocuments;
                         method form_method;
+                        class string:plomino_form;
                         enctype enctype|nothing
                         "
                 id="plomino_form">
@@ -261,6 +263,7 @@ jQuery(document).ready( function() {
                 tal:attributes="
                         name form/id;
                         method form_method;
+                        class string:plomino_form;
                         enctype enctype|nothing
                         "
                 id="plomino_form">
